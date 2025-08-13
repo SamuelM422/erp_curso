@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 # ===============================
-# CONFIGURAÇÕES
+# CONFIGURATIONS
 # ===============================
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 OWNER = "SamuelM422"
@@ -47,7 +47,7 @@ def get_commit_stats(commits):
         author_name = commit["commit"]["author"]["name"]
         sha = commit["sha"]
 
-        # Pega detalhes do commit (para additions/deletions)
+        # Get commit details (for additions/deletions)
         r = requests.get(f"{BASE_URL}/commits/{sha}", headers=HEADERS)
         r.raise_for_status()
         commit_data = r.json()
@@ -59,19 +59,19 @@ def get_commit_stats(commits):
     return stats
 
 def main():
-    print("📡 Buscando commits...")
+    print("📡 Fetching commits...")
     commits = get_commits()
-    print(f"✅ {len(commits)} commits encontrados.")
+    print(f"✅ {len(commits)} commits found.")
 
     if not commits:
-        print("⚠️ Nenhum commit encontrado no período informado.")
+        print("⚠️ No commits found in the specified period.")
         return
 
-    print("📊 Calculando estatísticas...")
+    print("📊 Calculating statistics...")
     stats = get_commit_stats(commits)
 
     if not stats:
-        print("⚠️ Nenhum dado de estatística gerado.")
+        print("⚠️ No statistics data generated.")
         return
 
     # Converte para DataFrame
@@ -80,7 +80,7 @@ def main():
     ])
     df = df.sort_values(by="commits", ascending=False)
 
-    print("\n=== Estatísticas por Autor ===")
+    print("\n=== Statistics by Author ===")
     print(df.to_string(index=False))
 
 if __name__ == "__main__":
