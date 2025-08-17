@@ -6,7 +6,8 @@ from companies.models import Enterprise, Employee
 User = get_user_model()
 
 class Authentication:
-    def signin(self, email=None, password=None):
+    @staticmethod
+    def signin(email=None, password=None):
         exception_auth = AuthenticationFailed('Email or password incorrect')
         user_exists = User.objects.filter(email=email).exists()
 
@@ -20,7 +21,8 @@ class Authentication:
 
         return user
 
-    def signup(self, name, email, password, type_account='owner', company_id=False):
+    @staticmethod
+    def signup(name, email, password, type_account='owner', company_id=False):
         if not name or name == '':
             raise APIException('Name is required')
 
