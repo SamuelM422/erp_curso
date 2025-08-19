@@ -50,7 +50,7 @@ class Authentication:
         if type_account == 'owner':
             Enterprise.objects.create(
                 name='Enterprise name',
-                user_id=created_user
+                owner_id=created_user.pk
             )
 
         if type_account == 'employee':
