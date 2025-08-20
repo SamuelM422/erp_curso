@@ -30,21 +30,24 @@ def check_permission(user, method, permission_to):
     return False
 
 # Permissions
-class BasePermission(permissions.BasePermission):
+class DynamicPermission(permissions.BasePermission):
     message = 'You do not have permission to perform this action'
-    permission_to = None
 
     def has_permission(self, request, view):
-        return check_permission(request.user, request.method, self.permission_to)
+        permission_to = getattr(view, 'permission_to', None)
 
-class EmployeePermission(BasePermission):
-    permission_to = 'employee'
+        if not permission_to:
+            return False
+        return check_permission(request.user, request.method, permission_to)
 
-class GroupsPermission(BasePermission):
-    permission_to = 'group'
-
-class GroupPermissionsPermission(BasePermission):
-    permission_to = 'group_permission'
-
-class TaskPermission(BasePermission):
-    permission_to = 'task'
+# class EmployeePermission(BasePermission):
+#     permission_to = 'employee'
+#
+# class GroupsPermission(BasePermission):
+#     permission_to = 'group'
+#
+# class GroupPermissionsPermission(BasePermission):
+#     permission_to = 'group_permission'
+#
+# class TaskPermission(BasePermission):
+#     permission_to = 'task'
