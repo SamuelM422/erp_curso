@@ -85,3 +85,56 @@ class GroupSerializer(serializers.ModelSerializer):
             })
 
         return permissions_data
+
+class PermissionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = (
+            'id',
+            'name',
+            'codename'
+        )
+
+class TasksSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'title',
+            'description',
+            'due_date',
+            'created_at',
+            'updated_at',
+            'status'
+        )
+
+    @staticmethod
+    def get_status(obj):
+        return obj.status.name
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+    employee = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'title',
+            'description',
+            'due_date',
+            'created_at',
+            'updated_at',
+            'status',
+        )
+
+    @staticmethod
+    def get_status(obj):
+        return obj.status.name
+
+    @staticmethod
+    def get_employee(obj):
+        return EmployeeSerializer(obj.employee).data
